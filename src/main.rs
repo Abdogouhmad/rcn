@@ -1,12 +1,13 @@
 use std::{env, fs, io::Error, path::Path};
 
 struct Rcn {
-    subcommands: Option<Commands>,
+    commands: Option<Commands>,
 }
 
 enum Commands {
     Modeles { name: String, ts_js: String },
     Help,
+    Version,
 }
 
 impl Rcn {
@@ -14,7 +15,7 @@ impl Rcn {
         let args: Vec<String> = env::args().collect();
 
         if args.len() < 2 {
-            return Self { subcommands: None };
+            return Self { commands: None };
         }
 
         let subcommand = &args[1];
@@ -25,11 +26,14 @@ impl Rcn {
                 let name = args[2].clone();
                 let ts_js = args[3].clone();
                 Self {
-                    subcommands: Some(Commands::Modeles { name, ts_js }),
+                    commands: Some(Commands::Modeles { name, ts_js }),
                 }
             }
             "help" | "-h" => Self {
-                subcommands: Some(Commands::Help),
+                commands: Some(Commands::Help),
+            },
+            "--version" | "-V" => Self {
+                commands: Some(Commands::Version),
             },
             _ => {
                 eprintln!("Error: Unknown subcommand '{}'.", subcommand);
@@ -56,14 +60,21 @@ impl Rcn {
         );
         println!("Usage: rcn <subcommand> [options]");
         println!("\n");
-        println!("Subcommands:");
+        println!("commands:");
         println!("  modeles <name> <language>    Generate a React component with the specified name and language (js or ts).");
-        println!("  help                         Display this help message.");
+        println!("  help/-h                      Display this help message.");
+        println!("  --version/-V                 Display the version of the tool.");
         println!("\n");
         println!("Examples:");
         println!("  rcn modeles MyComponent js   Generate a JavaScript React component named MyComponent.");
         println!("  rcn modeles MyComponent ts   Generate a TypeScript React component named MyComponent.");
-        println!("  rcn help/-h                     Display this help message.");
+        println!("  rcn help/-h                  Display this help message.");
+        println!("  rcn --version/-V             Display the version of the tool.");
+    }
+
+    // print the version make it dynamic
+    pub fn print_version() {
+        println!("rcn version {}", env!("CARGO_PKG_VERSION"));
     }
 }
 
@@ -73,11 +84,9 @@ impl Commands {
         let extensions_js = vec![".component.jsx", ".service.js"];
         let extensions_ts = vec![".component.tsx", ".service.ts", ".types.ts"];
 
-        let dir_compo = format!("components/{}", name);
-
         // Create the directory if it doesn't exist
-        if !Path::new(&dir_compo).exists() {
-            fs::create_dir_all(&dir_compo)?;
+        if !Path::new(&name).exists() {
+            fs::create_dir_all(&name)?;
         }
 
         let extensions = if ts_js.contains("js") {
@@ -91,7 +100,7 @@ impl Commands {
 
         for extension in extensions {
             let file_to_create = format!("{}{}", name, extension);
-            let file_path = Path::new(&dir_compo).join(&file_to_create);
+            let file_path = Path::new(&name).join(&file_to_create);
 
             // Create the file
             fs::File::create(file_path.clone())?;
@@ -105,11 +114,12 @@ impl Commands {
 fn main() {
     let rcn = Rcn::parse();
 
-    match rcn.subcommands {
+    match rcn.commands {
         Some(Commands::Modeles { name, ts_js }) => {
             Commands::create_modele(name, ts_js).expect("can't create");
         }
         Some(Commands::Help) => Rcn::handle_help(),
+        Some(Commands::Version) => Rcn::print_version(),
         None => {
             println!("No subcommand provided.");
         }
