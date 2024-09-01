@@ -18,7 +18,7 @@ To use RCN, you need to have Rust installed on your system. You can download and
 Once Rust is installed, you can clone this repository and build the tool using Cargo:
 
 ```sh
-cargo install https://github.com/Abdogouhmad/rcn
+cargo install --git https://github.com/Abdogouhmad/rcn.git
 ```
 
 ## Usage
