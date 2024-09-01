@@ -31,6 +31,7 @@ rcn <Command> [options]
 ### modeles
 
 Generates a React component with the specified name and language (JavaScript or TypeScript).
+
 ```bash
 rcn modeles <name> <language>
 
@@ -38,6 +39,12 @@ rcn modeles <name> <language>
     <language>: The language of the component (js for JavaScript, ts for TypeScript).
 ```
 
+````
+└── searchbar # component
+    ├── searchbar.component.tsx
+    ├── searchbar.service.ts
+    └── searchbar.types.ts
+````
 ### help
 
 Displays the help message with information about the available commands and their usage.
