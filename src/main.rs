@@ -56,22 +56,25 @@ impl Rcn {
     // Print the help message
     pub fn handle_help() {
         println!(
-            "rcn is a react component generator that generates the component with needed files\n"
+            "\x1b[1;32mrcn is a react component generator that generates the component with needed files\x1b[0m\n"
         );
-        println!("Usage: rcn <subcommand> [options]");
+        println!("\x1b[1;34mUsage: rcn <subcommand> [options]\x1b[0m");
         println!("\n");
-        println!("commands:");
-        println!("  modeles <name> <language>    Generate a React component with the specified name and language (js or ts).");
-        println!("  help/-h                      Display this help message.");
-        println!("  --version/-V                 Display the version of the tool.");
+        println!("\x1b[1;34mSubcommands:\x1b[0m");
+        println!("  \x1b[1;36mmodeles <name> <language>\x1b[0m    Generate a React component with the specified name and language (js or ts).");
+        println!("  \x1b[1;36mhelp\x1b[0m                         Display this help message.");
+        println!(
+            "  \x1b[1;36m--version/-V\x1b[0m                 Display the version of the tool."
+        );
         println!("\n");
-        println!("Examples:");
-        println!("  rcn modeles MyComponent js   Generate a JavaScript React component named MyComponent.");
-        println!("  rcn modeles MyComponent ts   Generate a TypeScript React component named MyComponent.");
-        println!("  rcn help/-h                  Display this help message.");
-        println!("  rcn --version/-V             Display the version of the tool.");
+        println!("\x1b[1;34mExamples:\x1b[0m");
+        println!("  \x1b[1;36mrcn modeles MyComponent js\x1b[0m   Generate a JavaScript React component named MyComponent.");
+        println!("  \x1b[1;36mrcn modeles MyComponent ts\x1b[0m   Generate a TypeScript React component named MyComponent.");
+        println!("  \x1b[1;36mrcn help/-h\x1b[0m                  Display this help message.");
+        println!(
+            "  \x1b[1;36mrcn --version/-V\x1b[0m             Display the version of the tool."
+        );
     }
-
     // print the version make it dynamic
     pub fn print_version() {
         println!("rcn version {}", env!("CARGO_PKG_VERSION"));
@@ -100,7 +103,7 @@ impl Commands {
 
         for extension in extensions {
             let file_to_create = format!("{}{}", name, extension);
-            let file_path = Path::new(&name).join(&file_to_create);
+            let file_path = Path::new(&name).join(file_to_create.to_lowercase());
 
             // Create the file
             fs::File::create(file_path.clone())?;
@@ -121,7 +124,7 @@ fn main() {
         Some(Commands::Help) => Rcn::handle_help(),
         Some(Commands::Version) => Rcn::print_version(),
         None => {
-            println!("No subcommand provided.");
+            eprintln!("\x1b[1;31mNo Command provided.\x1b[0m \x1b[1;33mTry:\x1b[0m rcn help");
         }
     }
 }
