@@ -1,12 +1,11 @@
 use core::panic;
-
-use rcn::{Commands, Rcn};
+use rcn::cli::{Commands, Rcn};
 
 #[test]
 fn long_help() {
     let args = vec!["rcn".to_string(), "help".to_string()];
 
-    let rcn = Rcn::parse(&args);
+    let rcn = Rcn::parse(&args).expect("Failed to parse 'help' command");
 
     if let Some(Commands::Help) = rcn.commands {
     } else {
@@ -18,7 +17,7 @@ fn long_help() {
 fn short_help() {
     let args = vec!["rcn".to_string(), "-h".to_string()];
 
-    let rcn = Rcn::parse(&args);
+    let rcn = Rcn::parse(&args).expect("Failed to parse '-h' command");
 
     if let Some(Commands::Help) = rcn.commands {
     } else {
@@ -30,25 +29,26 @@ fn short_help() {
 fn long_version() {
     let args = vec!["rcn".to_string(), "version".to_string()];
 
-    let rcn = Rcn::parse(&args);
+    let rcn = Rcn::parse(&args).expect("Failed to parse 'version' command");
 
     if let Some(Commands::Version) = rcn.commands {
         let version = format!("rcn version {}", env!("CARGO_PKG_VERSION"));
         assert_eq!(Rcn::print_version(), version)
     } else {
-        panic!("Expected version command")
+        panic!("Expected version command");
     }
 }
+
 #[test]
 fn short_version() {
     let args = vec!["rcn".to_string(), "-V".to_string()];
 
-    let rcn = Rcn::parse(&args);
+    let rcn = Rcn::parse(&args).expect("Failed to parse '-V' command");
 
     if let Some(Commands::Version) = rcn.commands {
         let version = format!("rcn version {}", env!("CARGO_PKG_VERSION"));
         assert_eq!(Rcn::print_version(), version)
     } else {
-        panic!("Expected version/-V command")
+        panic!("Expected version/-V command");
     }
 }
