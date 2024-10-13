@@ -75,6 +75,6 @@ impl<'a> Rcn<'a> {
 
     // print the version make it dynamic
     pub fn print_version() -> String {
-        format!("rcn version {}", env!("CARGO_PKG_VERSION"))
+        format!("rcn {}", env!("CARGO_PKG_VERSION"))
     }
 }
