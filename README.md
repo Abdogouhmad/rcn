@@ -20,7 +20,11 @@ Once Rust is installed, you can clone this repository and build the tool using C
 ```sh
 cargo install --git https://github.com/Abdogouhmad/rcn.git
 ```
+oor 
 
+```sh
+bash <(curl -sSL https://raw.githubusercontent.com/Abdogouhmad/rcn/main/setup.sh)
+```
 ## Usage
 
 ```
